@@ -20,8 +20,18 @@ class ChatRequest(BaseModel):
 class ChatResponse(BaseModel):
     response: str
     
+@app.get("/")
+def health_check():
+    return { "status": "ok", "service": "chat-service", "message": "API is running"}
+    
     
 @app.post("/chat", response_model=ChatResponse)
 def chat_endpoint(request: ChatRequest):
-    response = chat_with_user(request.message, request.history)
-    return ChatResponse(response=response)
+    try:
+        if not request.message.strip():
+            return ChatResponse(response="Please provide a valid message.")
+        response = chat_with_user(request.message, request.history)
+        return ChatResponse(response=response)
+    except Exception as e:
+        return ChatResponse(response=f"An error occurred: {str(e)}")
+   
