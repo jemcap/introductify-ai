@@ -5,4 +5,4 @@ pypdf
 openai
 openai-agents
 fastapi
-uvicorn
+uvicorn[standard]
